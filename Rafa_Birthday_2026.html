@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rāfa — Birthday Edition 2026</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0; min-height:100vh; overflow:hidden;
+  font-family:system-ui,-apple-system,Segoe UI,sans-serif;
+  background:radial-gradient(circle at 50% 20%,#35235f 0,#15132d 45%,#080914 100%);
+  color:#fff; display:flex; align-items:center; justify-content:center;
+}
+.stars,.confetti{position:fixed;inset:0;pointer-events:none}
+.star{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;opacity:.7;animation:twinkle 2s infinite alternate}
+@keyframes twinkle{to{opacity:.15;transform:scale(.5)}}
+.card{
+ width:min(92vw,520px); min-height:620px; padding:32px 25px;
+ border:1px solid rgba(255,255,255,.18); border-radius:30px;
+ background:rgba(255,255,255,.09); backdrop-filter:blur(18px);
+ box-shadow:0 25px 80px rgba(0,0,0,.45);
+ text-align:center; position:relative; z-index:2;
+}
+.badge{display:inline-block;padding:7px 13px;border-radius:999px;background:rgba(255,255,255,.12);font-size:12px;letter-spacing:2px}
+h1{font-size:42px;margin:18px 0 6px}
+.sub{opacity:.72;margin-bottom:28px}
+.progress{height:7px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden;margin:25px 0}
+.bar{height:100%;width:0;background:linear-gradient(90deg,#c7a7ff,#fff);transition:width .6s}
+.question{font-size:23px;min-height:70px;display:flex;align-items:center;justify-content:center}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+button{
+ border:1px solid rgba(255,255,255,.16); background:rgba(255,255,255,.1);
+ color:white;padding:15px;border-radius:16px;font-size:16px;cursor:pointer;
+ transition:.2s;
+}
+button:hover{transform:translateY(-2px);background:rgba(255,255,255,.18)}
+.small{font-size:12px;opacity:.55;margin-top:18px}
+#result{display:none}
+.emoji{font-size:55px;margin:12px}
+.note{line-height:1.7;color:rgba(255,255,255,.82)}
+.highlight{font-size:20px;font-weight:650;margin:22px 0}
+.reveal{animation:reveal .9s ease}
+@keyframes reveal{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}
+.heart{position:fixed;font-size:22px;animation:float 4s linear forwards;z-index:5}
+@keyframes float{from{transform:translateY(0) rotate(0);opacity:1}to{transform:translateY(-110vh) rotate(360deg);opacity:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+<div class="card">
+  <div id="game">
+    <span class="badge">RAFA • BIRTHDAY EDITION</span>
+    <h1>17.09.2026 🎂</h1>
+    <div class="sub">A tiny birthday experiment, made tonight.</div>
+    <div class="progress"><div class="bar" id="bar"></div></div>
+    <div class="question" id="question">Ready to unlock your birthday message?</div>
+    <div class="options" id="options">
+      <button onclick="start()">🔓 Unlock</button>
+    </div>
+    <div class="small">No pressure. Just a little surprise. ✨</div>
+  </div>
+
+  <div id="result">
+    <div class="emoji">🎂✨</div>
+    <span class="badge">ACHIEVEMENT UNLOCKED</span>
+    <h1>Rāfa.exe</h1>
+    <div class="sub">Birthday Edition — v17.09.2026</div>
+    <p class="highlight">Successfully upgraded. 🚀</p>
+    <p class="note">
+      আজকেই আমাদের পরিচয়—তাই তোমাকে নিয়ে বড় বড় কথা বলার সুযোগ আমার নেই। 😄
+      <br><br>
+      কিন্তু একটা coincidence বেশ সুন্দর:
+      <b>যেদিন প্রথম পরিচয়, সেদিনই তোমার birthday.</b>
+    </p>
+    <p class="note">
+      তাই আজকের দিনটার জন্য ছোট্ট একটা digital memory রেখে দিলাম।
+    </p>
+    <p class="highlight">May the next 365 days give you reasons to smile. 🤍</p>
+    <p class="note">
+      এই page-টা রেখে দিও।<br>
+      <b>17 September 2027</b>-এ আবার খুলে দেখবে। 🌙
+    </p>
+    <button onclick="celebrate()">🎉 One last surprise</button>
+    <p class="small">Made on the day we first met.</p>
+  </div>
+</div>
+
+<script>
+const qs=[
+ ["Tonight's first question… cake or ice cream?","🍰 Cake","🍦 Ice cream"],
+ ["Second one… night or morning?","🌙 Night","☀️ Morning"],
+ ["Final question… calm or chaotic?","🌿 Calm","😂 Chaotic"]
+];
+let step=-1;
+function start(){step=0;show();}
+function show(){
+ document.getElementById('bar').style.width=((step+1)/4*100)+'%';
+ document.getElementById('question').textContent=qs[step][0];
+ document.getElementById('options').innerHTML=
+ `<button onclick="next()">${qs[step][1]}</button><button onclick="next()">${qs[step][2]}</button>`;
+}
+function next(){
+ step++;
+ if(step<3) show();
+ else {
+   document.getElementById('bar').style.width='100%';
+   document.getElementById('question').textContent='Birthday message unlocked. ✨';
+   document.getElementById('options').innerHTML='<button onclick="reveal()">✨ Reveal</button>';
+ }
+}
+function reveal(){
+ document.getElementById('game').style.display='none';
+ const r=document.getElementById('result'); r.style.display='block'; r.className='reveal';
+ celebrate();
+}
+function celebrate(){
+ for(let i=0;i<22;i++){
+   setTimeout(()=>{
+    const e=document.createElement('div'); e.className='heart';
+    e.textContent=['✨','🤍','🎈','💫','🌙'][Math.floor(Math.random()*5)];
+    e.style.left=Math.random()*100+'vw'; e.style.bottom='-30px';
+    e.style.animationDuration=(3+Math.random()*3)+'s';
+    document.body.appendChild(e); setTimeout(()=>e.remove(),6500);
+   },i*90);
+ }
+}
+for(let i=0;i<90;i++){
+ const s=document.createElement('div');s.className='star';
+ s.style.left=Math.random()*100+'vw';s.style.top=Math.random()*100+'vh';
+ s.style.animationDelay=Math.random()*2+'s';document.getElementById('stars').appendChild(s);
+}
+</script>
+</body>
+</html>
